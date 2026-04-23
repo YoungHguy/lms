@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+结果（ {{ sitting.quiz.title }} 用于 {{ sitting.user }} | 学习管理系统
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">首页</a></li>
+		<li class="breadcrumb-item"><a href="{% url 'quiz_marking' %}">已完成考试</a></li>
+		<li class="breadcrumb-item active" aria-current="page">评分</li>
+	</ol>
+</nav>
+
+<div class="row col-12 justify-content-between">
+	<div class="header-title-md">测验标题： {{ sitting.quiz.title }}</div>
+	<em class="info-text title-danger">类别： {{ sitting.quiz.category }}</em>
+</div>
+
+<p>{{ sitting.quiz.description }}</p>
+<hr>
+<p><b>用户：</b> {{ sitting.user }}</p>
+<p><b>已完成：</b> {{ sitting.end|date }}</p>
+<p><b>分数：</b> {{ sitting.get_percent_correct }}%</p>
+<!-- <p><b>{% trans "Start" %}:</b> {{ sitting.start }}</p>
+<p><b>{% trans "End" %}:</b> {{ sitting.end }}</p> -->
+
+<table class="table table-bordered table-striped">
+
+  <thead>
+	<tr>
+	  <th>问题</th>
+	  <th>用户答案</th>
+	  <th></th>
+	  <th></th>
+	</tr>
+  </thead>
+
+  <tbody>
+{% for question in questions %}
+
+	<tr>
+      <td>
+        {{ question.content }}
+        {% if question.figure %}
+        <div style="max-width: 100px;"><img src="{{ question.figure.url }}" alt="{{ question.figure }}" width="100px"/></div>
+        {% endif %}
+      </td>
+	  <td>{{ question }}</td>
+	  <td>
+		{% if question.id in sitting.get_incorrect_questions %}
+		  <p>错误</p>
+		{% else %}
+		  <p>正确</p>
+		{% endif %}
+	  </td>
+	  <td>
+		<form action="" method="POST">{% csrf_token %}
+		  <input type="hidden" name="qid" value="{{ question.id }}">
+		  <button type="submit" class="btn btn-sm btn-secondary">切换是否正确</button>
+		</form>
+	  </td>
+	</tr>
+
+{% endfor %}
+
+  </tbody>
+
+</table>
+{% endblock %}

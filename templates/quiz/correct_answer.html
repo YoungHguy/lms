@@ -1,0 +1,32 @@
+{% load i18n %}
+{% if previous.answers %}
+  <table class="table table-striped table-bordered">
+    <tbody>
+  	  {% for answer in previous.answers %}
+        {% if answer.correct %}
+  	    <tr class="success">
+  		  <td>{{ answer }}</td>
+  		  <td class="text-success"><strong>这是正确答案</strong></td>
+		</tr>
+        {% else %}
+  		<tr>
+      	  <td>{{ answer }}</td>
+  		  <td>
+  			{% if previous.question_type.MCQuestion %}
+  			  {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
+  			    这是您的答案。
+  			  {% endif %}
+  			{% endif %}
+  		  </td>
+		</tr>
+  	  {% endif %}
+  	{% endfor %}
+    </tbody>
+  </table>
+
+  {% if user_was_incorrect %}
+    <div class="text-danger">
+  	  <strong>您答错了上述问题</strong>
+    </div>
+  {% endif %}
+{% endif %}

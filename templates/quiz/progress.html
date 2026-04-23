@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %} 进度页面 | 学习管理系统 {% endblock %}
+{% block description %} 用户进度页面 {% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">进度页面</li>
+    </ol>
+</nav>
+
+<p class="title-1"><i class="fas fa-record-vinyl"></i>测验进度记录</p>
+
+  {% if cat_scores %}
+
+  <div class="header-title text-center">问题类别分数</div>
+  <div class="title-line"></div>
+
+  <table class="table table-bordered table-striped">
+
+	<thead>
+	  <tr>
+		<th>类别</th>
+		<th>正确回答</th>
+		<th>错误</th>
+		<th>%</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+
+	  {% for cat, value in cat_scores.items %}
+	  <tr>
+		<td>{{ cat }}</td>
+		<td>{{ value.0 }}</td>
+		<td>{{ value.1 }}</td>
+		<td>{{ value.2 }}</td>
+	  </tr>
+
+	  {% endfor %}
+
+	</tbody>
+
+  </table>
+
+
+  {% endif %}
+
+  {% if exams %}
+
+  <div class="header-title-xl">以往试卷</div>
+  <p class="lead fw-bold">
+	{% if request.user.is_superuser %}
+	学生考试成绩
+	{% else %}
+	以下是您参加的考试结果
+	{% endif %}
+  </p>
+  <div class="text-light bg-secondary mb-2 p-1">已完成考试总数： {{ exams_counter }}</div>
+<div class="table-responsive">
+  <table class="table table-bordered table-striped">
+
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>测验标题</th>
+		<th>分数</th>
+		<th>可能分数</th>
+		<th>满分100分</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+
+	  {% for exam in exams %}
+
+	  <tr>
+		<td>{{ forloop.counter }}</td>
+		<td>{{ exam.quiz.title }}</td>
+		<td>{{ exam.current_score }}</td>
+		<td>{{ exam.get_max_score }}</td>
+		<td>{{ exam.get_percent_correct }}%</td>
+	  </tr>
+
+	  {% endfor %}
+
+	</tbody>
+
+  </table>
+</div>
+  {% endif %}
+  {% if not cat_scores and not exams %}
+  <h4 class="text-center mt-5 py-5 text-muted">
+	  <i class="fa-regular fa-folder-open me-2"></i>进度记录将显示在这里
+  </h4>
+  {% endif %}
+
+{% endblock %}

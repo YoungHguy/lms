@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ video.title }} | 学习管理系统{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'programs' %}">项目</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'program_detail' video.course.program.id %}">{{ video.course.program }}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'course_detail' video.course.slug %}">{{ video.course }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ video.title }}</li>
+    </ol>
+</nav>
+    
+<p class="title-1">{{ video.title }}</p>
+<br><br>
+
+<div class="col-md-10 mx-auto d-block">
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+        <video 
+            src="{{ video.video.url }}" 
+            controls 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+            autoplay
+            preload="metadata"
+        >
+            您的浏览器不支持 video 标签。
+        </video>
+    </div>
+    <p><i class="fas fa-calendar"></i> {{ video.timestamp|timesince }} 前</p>
+    {% if video.summary %}
+    <p class="text-orange text-center">{{ video.summary }}</p>
+    {% else %}
+    未设置视频描述。
+    {% endif %}
+</div>
+
+<style>
+.video-container video {
+    background-color: #000;
+    max-height: 70vh;
+}
+</style>
+
+{% endblock content %}

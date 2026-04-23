@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统{% endblock title %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+.bg-white.border .card-header-ne,
+.bg-white.border .card-header-ne * {
+    color: #000 !important;
+}
+.bg-white.border .p-2\.my-2 {
+    color: #333 !important;
+}
+.bg-white.border .p-2\.my-2 * {
+    color: #333 !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">首页</li>
+    </ol>
+</nav>
+
+{% if request.user.is_superuser %}
+<div class="manage-wrap">
+    <a class="btn btn-primary" href="{% url 'add_item' %}"><i class="fas fa-plus"></i>添加新文章</a>
+</div>
+{% endif %}
+
+{% include 'snippets/messages.html' %}
+
+<div>
+    <div class="title-1">新闻 &amp; 事件</div>
+</div>
+
+<div class="col-md-2 ms-auto d-flex">
+    <div class="me-3">
+        <span class="color-indicator bg-primary"></span> 新闻
+    </div>
+    <div>
+        <span class="color-indicator bg-purple"></span> 事件
+    </div>
+</div>
+
+<div class="container-fluid">
+    {% if items %}
+    <div class="row">
+        {% for item in items %}
+        <div class="col-md-4 mb-4">
+            <div class="bg-white border">
+                <div class="card-header-ne {% if item.posted_as == 'News' %}新闻{% else %}事件{% endif %} p-2">
+                    <span class="p-0" style="color: #000;">
+                        {{ item.title|title }}
+                    </span>
+                    {% if request.user.is_superuser %}
+                    <div class="dropstart">
+                        <button class="btn btn-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v text-white"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'edit_post' pk=item.id %}"><i
+                                    class="unstyled me-2 fas fa-pencil-alt"></i>编辑</a>
+                            <a class="dropdown-item" href="{% url 'delete_post' pk=item.id %}"><i
+                                    class="unstyled me-2 fas fa-trash-alt"></i>删除</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="p-2 my-2" style="min-height: 120px; color: #333;">{{ item.summary }}</div>
+
+                <div class="bg-light p-1 small text-secondary text-end pe-3">
+                    <i class="fa fa-calendar small unstyled"></i>
+                    {{ item.updated_date|timesince }} 前
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <h4 class="text-center mt-5 py-5 text-muted">
+        <i class="fa-regular fa-folder-open me-2"></i>学校新闻和事件将显示在这里。
+    </h4>
+
+    {% endif %}
+
+</div>
+
+{% endblock content %}

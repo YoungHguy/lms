@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统{% endblock title %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'course_allocation_view' %}">课程分配</a></li>
+        <li class="breadcrumb-item active" aria-current="page">分配表单</li>
+    </ol>
+</nav>
+
+{% include 'snippets/messages.html' %}
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <p class="form-title">课程分配表单</p>
+            <div class="p-3">
+                <form action="" method="POST">{% csrf_token %}
+                      {{ form.lecturer|as_crispy_field }}
+                      {{ form.courses|as_crispy_field }}
+                        
+                    {% for course in form.courses.all %}{{ course }}{% endfor %}
+
+                    <input class="btn btn-outline-primary" type="submit" value="保存">
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

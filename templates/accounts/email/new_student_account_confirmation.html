@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Account Confirmation</title>
+    <style>
+      body,
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        color: #46528f;
+        background-color: #ebf0fb;
+        padding: 20px;
+        line-height: 1.4;
+      }
+
+      .container {
+        width: 600px;
+        max-width: 600px !important;
+        margin: 0 auto;
+      }
+
+      .card {
+        background-color: #fff;
+        border: 1px solid #cfcfcf;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .header {
+        background-color: #ebf0fb;
+        border-bottom: 1px solid #cfcfcf;
+        padding: 0.5rem 2rem;
+      }
+
+      .card-body {
+        padding: 1.5rem 2rem;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        color: #012481;
+        margin-bottom: 12px;
+      }
+
+      p {
+        font-size: 16px;
+        margin-bottom: 12px;
+        color: #46528f;
+      }
+
+      .small {
+        font-size: small;
+      }
+
+      .text-muted {
+        color: rgba(70, 82, 143, 0.6) !important;
+      }
+
+      .btn {
+        display: inline-block;
+        background-color: #4caf50;
+        color: #fff !important;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      ul {
+        margin: 0 0 12px 18px;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="header">
+          <h2 class="text-muted">学习管理分析系统</h2>
+          <p class="small text-muted">账号确认与登录凭证</p>
+        </div>
+        <div class="card-body">
+          <h1>Confirm your account</h1>
+          <h4>Dear <b>{{ user.get_full_name }}</b>,</h4>
+          <p>
+            新学生账号 <b>{{ user.username }}</b> 已创建。您收到此电子邮件是因为系统管理员已将您的电子邮件地址用于注册账号。
+          </p>
+          <h5>登录凭证：</h5>
+          <ul>
+            <li>账号: {{ user.username }}</li>
+            <li>密码: {{ password }}</li>
+          </ul>
+          <p>为确保您的账号安全，请务必修改密码。</p>
+          <p>
+            <a href="http://127.0.0.1:8000/accounts/login/" class="btn">Login</a>
+          </p>
+          <p class="text-muted small">
+            如果您认为此电子邮件不应发送给您，您可以简单地忽略它。
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+

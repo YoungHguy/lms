@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统{% endblock title %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'programs' %}">项目</a></li>
+        <li class="breadcrumb-item active" aria-current="page">课程表单</li>
+    </ol>
+</nav>
+
+<div class="title-1">课程表单</div>
+<br>
+<br>
+
+{% include 'snippets/messages.html' %}
+
+<form action="" method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <p class="form-title">课程详情</p>
+                <div class="p-3">
+                    {{ form.title|as_crispy_field }}
+                    {{ form.code|as_crispy_field }}
+                    {{ form.summary|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <p class="form-title">其他信息</p>
+                <div class="p-3">
+                    {{ form.program|as_crispy_field }}
+                    {{ form.credit|as_crispy_field }}
+                    {{ form.year|as_crispy_field }}
+                    {{ form.semester|as_crispy_field }}
+                    {{ form.level|as_crispy_field }}
+                    {{ form.is_elective|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <input class="btn btn-primary mt-3" type="submit" value="保存">
+</form>
+
+{% endblock content %}

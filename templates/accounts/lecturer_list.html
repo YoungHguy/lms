@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统{% endblock title %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首页</a></li>
+      <li class="breadcrumb-item active" aria-current="page">讲师</li>
+    </ol>
+</nav>
+
+{% if request.user.is_superuser %}
+<div class="manage-wrap">
+    <a class="btn btn-primary" href="{% url 'add_lecturer' %}"><i class="fas fa-plus"></i>添加讲师</a>
+    <a class="btn btn-primary" target="_blank" href="{% url 'lecturer_list_pdf' %}"><i class="fas fa-download"></i> 下载PDF</a><!--new-->
+</div>
+{% endif %}
+
+<p class="title-1"><i class="fas fa-chalkboard-teacher"></i>讲师</p>
+
+{% include 'snippets/messages.html' %}
+{% include 'snippets/filter_form.html' %}
+
+<div class="table-responsive table-shadow table-light table-striped m-0 mt-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th> 身份证号' </th>
+                <th> 全名 </th>
+                <th> 邮箱 </th>
+                <th> 手机号 </th>
+                <th> 地址/城市 </th>
+                <th> 最后登录  </th>
+                {% if request.user.is_superuser %}
+                <th> 操作 </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for lecturer in filter.qs %}
+            <tr>
+                <td> {{ forloop.counter }}.</td>
+                <td>{{ lecturer.username }}</td>
+                <td><a href="{% url 'profile_single' lecturer.id %}">{{ lecturer.get_full_name }}</a></td>
+                <td>{{ lecturer.email }}</td>
+                <td>{{ lecturer.phone }}</td>
+                <td>{{ lecturer.address }}</td>
+                <td>{{ lecturer.last_login }}</td>
+                {% if request.user.is_superuser %}
+                <td> 
+                    <div class="dropdown">
+                        <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-ellipsis-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="{% url 'staff_edit' pk=lecturer.pk %}"><i class="unstyled me-2 fas fa-edit"></i>更新</a></li>
+                          <li><a class="dropdown-item"  target="_blank" href="{% url 'profile_single' lecturer.id %}?download_pdf=1"><i class="unstyled me-2 fas fa-download"></i>下载PDF</a></li>
+                          <li><a class="dropdown-item text-danger" href="{% url 'lecturer_delete' pk=lecturer.pk %}"><i class="unstyled me-2 fas fa-trash-alt"></i> 删除</a></li>
+                        </ul>
+                    </div>
+                </td>
+                {% endif %}
+                
+                {% empty %}
+                <tr>
+                  <td colspan="8">
+                  <span class="text-danger">
+                    无讲师。
+                    {% if request.user.is_superuser %}
+                    <a href="{% url 'add_lecturer' %}">
+                    <i class="primary" style="font-size: 22px;">
+                        立即添加讲师。
+                    </i>
+                    {% endif %}
+                    </a>
+                  </span>
+                </td>
+                </tr>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
+

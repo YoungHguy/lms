@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统 {% endblock title %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首页</a></li>
+      <li class="breadcrumb-item active" aria-current="page">学期列表</li>
+    </ol>
+</nav>
+
+{% if request.user.is_superuser %}
+<div class="manage-wrap">
+    <a class="btn btn-primary" href="{% url 'add_semester' %}"><i class="fas fa-plus"></i>添加新学期</a>
+</div>
+{% endif %}
+
+<div class="title-1"><i class="fas fa-calendar-alt"></i>学期列表</div>
+
+{% include 'snippets/messages.html' %}
+
+<div class="table-responsive table-shadow p-0 mt-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th> 学期 </th>
+                <th> 当前学期 </th>
+                <th> 学期 </th>
+                <th> 下学期开始 </th>
+                {% if request.user.is_superuser %}
+                <th> 操作 </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for semester in semesters %}
+            <tr>
+                <td> {{ forloop.counter }}.</td>
+                <td>{{ semester.semester }}</td>
+                <th>
+                    {% if semester.is_current_semester == False %}
+                    <i class="fas fa-times-circle fa-1-5x danger"></i>
+                    {% else %}
+                    <i class="fas fa-check-circle fa-1-5x"></i>
+                    <i class="icon-times-circle"></i>
+                    {% endif %}
+                </th>
+                <td>{{ semester.session }}</td>
+                <td>{{ semester.next_semester_begins }}</td>
+
+                {% if request.user.is_superuser %}
+                <td>
+                    <div class="update-delete">
+                        <a href="{% url 'edit_semester' pk=semester.pk %}" class="update" title="编辑"><i
+                                class="fas fa-pencil-alt"></i></a>
+                        <a href="{% url 'delete_semester' pk=semester.pk %}" class="delete" title="删除"><i
+                                class="fas fa-trash-alt"></i></a>
+                    </div>
+                </td>
+                {% endif %}
+
+                {% empty %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <span class="text-danger">
+                        无学期。
+                        {% if request.user.is_superuser %}
+                        <a href="{% url 'add_semester' %}">
+                            <i class="primary" style="font-size: 22px;">
+                                立即添加学期。
+                            </i>
+                            {% endif %}
+                        </a>
+                    </span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

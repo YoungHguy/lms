@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} {{ title }} | 学习管理系统{% endblock title %}
+
+{% load static %}
+
+{% block header %}
+<style>
+  .profile-page,
+  .profile-page p,
+  .profile-page li,
+  .profile-page strong,
+  .profile-page span,
+  .profile-page a {
+    color: #ffffff !important;
+  }
+
+  .profile-page a.text-primary {
+    color: #4fd1ff !important;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首页</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ user.get_full_name }}</li>
+    </ol>
+</nav>
+
+{% include 'snippets/messages.html' %}
+
+<div class="row profile-page">
+
+    <div class="col-md-3 mx-auto">
+        <div class="card  p-2">
+            <div class="text-center">
+                <img src="{{ user.picture.url }}" class="w-100">
+                <ul class="px-2 list-unstyled">
+                    <li>{{ user.get_full_name|title }}</li>
+                    <li><strong>最后登录： </strong>{{ user.last_login|date }}</li>
+                    <li><strong>角色： </strong>
+                        {{ user.get_user_role }}
+                    </li>
+                </ul>
+            </div>
+            <hr>
+            <a class="mb-2" href="{% url 'edit_profile' %}"><i class="fas fa-user-edit unstyled"></i>
+                <span class="mobile-hide">编辑资料</span></a>
+            <a href="{% url 'change_password' %}"><i class="fas fa-lock unstyled"></i><span class="mobile-hide">
+                修改密码</span></a>
+        </div>
+    </div>
+
+    <div class="col-md-9 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <!-- {% if user.is_student %}
+                <p class="form-title"><i class="fas fa-book-open"></i>Enrolled Courses</p>
+                <div class="dashboard-description">
+                    {% if courses %}
+                        <div class="flex">
+                            {% for course in courses %}
+                                <div class="flex"><a class="edit-btn" href="{{ course.get_absolute_url }}">{{ course }}</a></div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                            <div class="text-danger"><i class="far fa-frown"></i>No courses!</div>
+                    {% endif %}
+                </div>
+                {% endif %} -->
+    
+                {% if user.is_lecturer %}
+                <p class="fw-bold"><i class="fas fa-book-open"></i> 我的课程</p>
+                {% if courses %}
+                <ul>
+                    {% for course in courses %}
+                    <li><a href="{{ course.get_absolute_url }}" class="text-primary">{{ course }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="text-danger">未分配课程！</div>
+                {% endif %}
+                <hr>
+                {% endif %}
+    
+                <p class="fw-bold"><i class="me-2 fas fa-user"></i>个人信息</p>
+                <div class="dashboard-description">
+                    <p><strong>名：</strong> {{ user.first_name|title }}</p>
+                    <p><strong>姓：</strong> {{ user.last_name|title }}</p>
+                    <p><strong>身份证号：</strong> {{ user.username }}</p>
+                </div>
+                {% if user.is_student %}
+                <hr>
+                <p class="fw-bold"><i class="me-2 fas fa-graduation-cap"></i>申请人信息</p>
+                <div class="dashboard-description">
+                    <p><strong>学校： </strong>Hawas预备学校</p>
+                    <p><strong>级别： </strong>{{ level.level }}</p>
+                </div>
+                {% endif %}
+    
+                <hr>
+                <p class="fw-bold"><i class="me-2 fas fa-phone-square-alt"></i>联系信息</p>
+                <div class="dashboard-description">
+                    <p><strong>邮箱：</strong> {{ user.email }}</p>
+                    <p><strong>电话：</strong> {{ user.phone }}</p>
+                    <p><strong>地址/城市：</strong> {{ user.address }}</p>
+                </div>
+    
+                <hr>
+                <p class="fw-bold"><i class="me-2 fa fa-calendar-day"></i>重要日期</p>
+                <div class="dashboard-description">
+                    <p><strong>最后登录：</strong> {{ user.last_login }}</p>
+                    {% if current_semester and current_session %}
+                    <p><strong>学年：</strong> {{ current_semester }} 学期 {{ current_session }}</p>
+                    {% endif %}
+                    <p><strong>注册日期：</strong> {{ user.date_joined|date }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mx-auto"></div>
+
+</div>
+{% endif %}
+
+{% endblock content %}

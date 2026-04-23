@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统{% endblock title %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">管理面板</li>
+    </ol>
+</nav>  
+
+<div class="title-1"><i class="fas fa-user-tie"></i>管理面板</div>
+<br>
+<br>
+
+{% include 'snippets/messages.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="border-bottom">
+                管理<a class="link" href="{% url 'lecturer_list' %}"> 讲师 &raquo;</a>
+                <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) lecturers</p>
+            </div>
+
+            <div class="border-bottom mt-3">
+                管理<a class="link" href="{% url 'student_list' %}"> 学生 &raquo;</a>
+            <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) 学生</p>
+            </div>
+
+            <div class="border-bottom mt-3">
+                管理<a class="link" href="{% url 'session_list' %}"> 学期 &raquo;</a>
+            <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) 学期</p>
+            </div>
+
+            <div class="mt-3">
+                管理<a class="link" href="{% url 'semester_list' %}"> 学期 &raquo;</a>
+            <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) 学期</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="border-bottom">
+                添加课程 &amp; 退选
+                <label class="switch switch-text switch-success switch-pill" style="float: right;">
+                <input type="checkbox" class="switch-input" checked="true">
+                <span data-on="On" data-off="Off" class="switch-label"></span>
+                <span class="switch-handle"></span>
+                </label>
+                <p class="text-muted">切换 
+                    <i class="info-text py-0 px-2 bg-success text-light">ON</i> or <i class="info-text py-0 px-2 bg-danger text-light">OFF</i>
+                </p>
+            </div>
+
+            <div class="border-bottom mt-3">
+                管理<a class="link" href="{% url 'programs' %}"> 项目 &amp; 课程 &raquo;</a>
+            <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) 项目</p>
+            </div>
+
+            <div class="border-bottom mt-3">
+                管理<a class="link" href="{% url 'course_allocation_view' %}"> 课程分配 &raquo;</a>
+            <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) 课程分配</p>
+            </div>
+
+            <div class="mt-3">
+                管理<a class="link" href="{% url 'home' %}"> 新闻 &amp; 事件 &raquo;</a>
+            <p class="text-muted">CRUD (Create, Retrieve, Update &amp; Delete) 新闻 &amp; 事件</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

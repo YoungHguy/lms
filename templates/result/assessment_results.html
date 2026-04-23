@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{{ title }} | 学习管理系统{% endblock title %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首页</a></li>
+      <li class="breadcrumb-item active" aria-current="page">评估结果</li>
+  </ol>
+</nav>
+
+{% include 'snippets/messages.html' %}
+
+<div class="title-1"><i class="fa fa-spell-check"></i>评估结果</div>
+<p>{{ student.level }} 结果</p>
+
+<div class="table-responsive p-0 px-2 mt-3">
+  <div class="table-title"><u>第一学期：</u></div>
+  <table class="table table-light">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>课程标题</th>
+        <th>课程代码</th>
+        <th>学分</th>
+        <th>作业</th>
+        <th>期中考试</th>
+        <th>测验</th>
+        <th>出勤</th>
+        <th>期末考试</th>
+        <th>总计</th>
+      </tr>
+    </thead>
+    {% for course in courses %}
+    {% if course.course.semester == "First" %}
+    <tbody>
+      <tr class="{% if forloop.counter|divisibleby:2 %}bg-gray{% endif %}">
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{{ course.course.get_absolute_url }}">{{ course.course.title }}</a></td>
+        <td>{{ course.course.code }}</td>
+        <td>{{ course.course.credit }}</td>
+        <td>{{ course.assignment }}</td>
+        <td>{{ course.mid_exam }}</td>
+        <td>{{ course.quiz }}</td>
+        <td>{{ course.attendance }}</td>
+        <td>{{ course.final_exam }}</td>
+        {% if course.total >= 45 %}
+        <td class="success"><i class="fas fa-check-circle"></i> {{ course.total }}</td>
+        {% else %}
+        <td class="danger"><i class="fas fa-exclamation-circle"></i> {{ course.total }}</td>
+        {% endif %}
+      </tr>
+    </tbody>
+    {% endif %}
+    {% endfor %}
+  </table>
+  </div>
+
+  <div class="table-responsive p-3 mt-3">
+    <div class="table-title"><u>第二学期：</u></div>
+    <table class="table table-light">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>课程标题</th>
+        <th>课程代码</th>
+        <th>学分</th>
+        <th>作业</th>
+        <th>期中考试</th>
+        <th>测验</th>
+        <th>出勤</th>
+        <th>期末考试</th>
+        <th>总计</th>
+      </tr>
+    </thead>
+    {% for course in courses %}
+    {% if course.course.semester == "Second" %}
+    <tbody>
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{{ course.course.get_absolute_url }}">{{ course.course.title }}</a></td>
+        <td>{{ course.course.code }}</td>
+        <td>{{ course.course.credit }}</td>
+        <td>{{ course.assignment }}</td>
+        <td>{{ course.mid_exam }}</td>
+        <td>{{ course.quiz }}</td>
+        <td>{{ course.attendance }}</td>
+        <td>{{ course.final_exam }}</td>
+        {% if course.total >= 45 %}
+        <td class="success"><i class="fas fa-check-circle"></i> {{ course.total }}</td>
+        {% else %}
+        <td class="danger"><i class="fas fa-exclamation-circle"></i> {{ course.total }}</td>
+        {% endif %}
+      </tr>
+    </tbody>
+    {% endif %}
+    {% endfor %}
+  </table>
+</div>
+
+<br>
+{% endblock %}
